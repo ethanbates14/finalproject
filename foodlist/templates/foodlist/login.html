@@ -1,0 +1,41 @@
+{% extends "foodlist/base.html" %}
+
+{% block title %}
+    User Login
+{% endblock %}
+
+{% block body %}
+{% if user.is_authenticated %}
+<div class="container text-center">
+  <div class="row align-items-center">
+    <div class="col"></div>
+    <div class="col-sm-4">
+      <div class="alert alert-primary" role="alert">Already Logged In!</div>
+    </div>
+    <div class="col"></div>
+  </div>
+</div>
+{% else %}
+<div class="container text-center">
+  <div class="row align-items-center">
+    <div class="col"></div>
+    <div class="col-sm-4">
+
+      <h2 class="ita_header display-3">LOG IN</h2>
+      <form action="{% url 'login' %}" method="POST">
+          {% csrf_token %}
+        <div class="form-group">
+          <label for="username"></label>
+          <input type="username" class="form-control" name="username" autocomplete="off" placeholder="Username">
+          <label for="password"></label>
+          <input type="password" class="form-control" name="password" autocomplete="off" placeholder="Password">
+          <br>
+          <button type="submit" class="btn btn-outline-secondary btn-lg">Log In</button>
+        </div>
+      </form>
+    </div>
+    <div class="col"></div>
+  </div>
+</div>
+{% endif %}
+{% endblock %}
