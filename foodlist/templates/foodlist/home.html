@@ -10,6 +10,14 @@
         <div class="col-sm-12">
             <h1 class="display-3">Hello, {{ user.first_name }}</h1>
 
+            <h3>Search</h3>
+            {% csrf_token %}
+            <input type="text" id="search" name="q" class="form-control" autocomplete="off" placeholder="Search Foods"/>
+
+            <ul id="search-results">
+
+            </ul>
+
         </div>
     </div>
 </div>

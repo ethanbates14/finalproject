@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
-#from foodlist.models import Orders
+from foodlist.models import Category, Food
 
 # Food List Views
 
@@ -60,3 +60,17 @@ def register_view(request):
 def logout_view(request):
     logout(request)
     return render(request, "foodlist/login.html")
+
+def search_foods(request):
+    if request.method == "POST":
+        search_text = request.POST.get('search_text')
+    else:
+        search_text = ''
+
+    food_items = Food.objects.filter(item_name__contains=search_text)
+
+    context = {
+        "search": food_items
+    }
+
+    return render(request,"ajax_search.html",context)
