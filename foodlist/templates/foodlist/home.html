@@ -1,27 +1,41 @@
-{% extends "foodlist/base.html" %}
-
-{% block title %}
-    Home
-{% endblock %}
-
-{% block body %}
-<div class="container">
-    <div class="row">
-        <div class="col-sm-12">
-            <h1 class="av_header text-center">Hello, {{ user.first_name }}</h1>
-            {% if user_data %}
-                <h3>Your Food Lists</h3>
-                <ul>
-                {% for item in user_data %}
-                <li>{{ item.list_name }} [{{ item.list_date }}]</li>
-                {% endfor %}
-                </ul>
-            {% else %}
-                <h3>No Lists Yet!</h3>
-            {% endif %}
-
+{% extends "foodlist/base.html" %} {% block title %} Home {% endblock %} {% block body %}
+<div class="container text-center">
+    <h1 class="av_header">Hello, {{ user.first_name }}</h1>
+    {% if user_data %}
+    <div class="row align-items-center">
+        <div class="col"></div>
+        <div class="col-sm-8">
+            <h3 class="text-center home_list">Your Food Lists</h3>
+            <table id="user_listtb" class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>List Name</th>
+                        <th>Created</th>
+                        <th>Options</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in user_data %}
+                    <tr>
+                        <th scope="row">{{ item.id }}</th>
+                        <td>{{ item.list_name }}</td>
+                        <td>{{ item.list_date }}</td>
+                        <td class="text-center">
+                            <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
+                            <button type="button" class="btn btn-sm btn-outline-danger">Remove</button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
         </div>
+        <div class="col"></div>
     </div>
+    {% else %}
+    <h3 class="text-center home_list">No Lists Yet!</h3>
+    {% endif %}
+
 </div>
 
 {% endblock %}

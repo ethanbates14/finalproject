@@ -45,3 +45,21 @@ body {
     color: #2C3E50;
     margin-top: 50px;
 }
+
+/* Home */
+
+.home_list {
+    font-family: 'Kaushan Script', cursive;
+    color: #2C3E50;
+    font-size: 36px;
+}
+
+#user_listtb {
+    color: white;
+    border: 2px solid;
+
+}
+
+table,th,td,tr {
+    background-color: #2C3E50;
+}
