@@ -1,0 +1,47 @@
+/*Main */
+body {
+    background-color:#4EC667;
+}
+
+/* Nav */
+.navbar-dark {
+    background-color:#2C3E50 !important;
+    font-family: 'Kaushan Script', cursive;
+    font-size:200%;
+}
+
+#av_logo {
+    font-size: 25px;
+    font-family: 'Kaushan Script', cursive;
+    padding: 4px;
+    border: solid;
+    border-color: white;
+    border-radius: 50%;
+    color:white;
+}
+
+/* Landing */
+.jumbotron {
+    margin-top: 100px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    background-color:#2C3E50;
+    color:white;
+}
+
+#avocado_landing {
+    font-family: 'Kaushan Script', cursive;
+    font-size: 88px;
+}
+
+#landing-cnt h1 {
+    margin-top: 25px;
+}
+
+/*Login and Register*/
+.av_header {
+    font-family: 'Kaushan Script', cursive;
+    font-size: 88px;
+    color: #2C3E50;
+    margin-top: 50px;
+}

@@ -3,18 +3,27 @@ from django.contrib.auth.models import User
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
-from foodlist.models import Category, Food
+from foodlist.models import Category, Food, Userlist, Listdetail
+import json
 
-# Food List Views
+#Main Page
+def landing(request):
+    return render(request, "foodlist/landing.html")
 
+#User Home
 def index(request):
     if not request.user.is_authenticated:
         return render(request, "foodlist/login.html", {"message": None})
+    else:
+        user_lists = Userlist.objects.filter(user=request.user.id)
+
     context = {
-        "user": request.user
+        "user": request.user,
+        "user_data": user_lists
     }
     return render(request, "foodlist/home.html", context)
 
+#User Login
 def login_view(request):
     if request.method == "POST":
         username = request.POST.get('username')
@@ -30,6 +39,7 @@ def login_view(request):
     else:
         return render(request, "foodlist/login.html", {"message": None})
 
+#User Registration
 def register_view(request):
     if request.method == "POST":
         u_firstname = request.POST.get('firstname')
@@ -56,21 +66,32 @@ def register_view(request):
     else:
         return render(request, "foodlist/register.html")
 
-
+#User Logout
 def logout_view(request):
     logout(request)
     return render(request, "foodlist/login.html")
 
-def search_foods(request):
-    if request.method == "POST":
-        search_text = request.POST.get('search_text')
+
+#Add List
+def new_list(request):
+    if not request.user.is_authenticated:
+        return render(request, "foodlist/login.html", {"message": None})
     else:
-        search_text = ''
+        return render(request, "foodlist/new_list.html")
 
-    food_items = Food.objects.filter(item_name__contains=search_text)
+#Search Foods
+def get_foods(request):
+    if request.is_ajax():
+        q = request.GET.get('term', '')
+        foods = Food.objects.filter(item_name__icontains=q)
+        results = []
+        for pl in foods:
+            foods_json = {}
+            foods_json = pl.item_name
+            results.append(foods_json)
+            data = json.dumps(results)
+    else:
+        data = 'fail'
 
-    context = {
-        "search": food_items
-    }
-
-    return render(request,"ajax_search.html",context)
+    mimetype = 'application/json'
+    return HttpResponse(data, mimetype)

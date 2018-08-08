@@ -8,15 +8,17 @@
 <div class="container">
     <div class="row">
         <div class="col-sm-12">
-            <h1 class="display-3">Hello, {{ user.first_name }}</h1>
-
-            <h3>Search</h3>
-            {% csrf_token %}
-            <input type="text" id="search" name="q" class="form-control" autocomplete="off" placeholder="Search Foods"/>
-
-            <ul id="search-results">
-
-            </ul>
+            <h1 class="av_header text-center">Hello, {{ user.first_name }}</h1>
+            {% if user_data %}
+                <h3>Your Food Lists</h3>
+                <ul>
+                {% for item in user_data %}
+                <li>{{ item.list_name }} [{{ item.list_date }}]</li>
+                {% endfor %}
+                </ul>
+            {% else %}
+                <h3>No Lists Yet!</h3>
+            {% endif %}
 
         </div>
     </div>
