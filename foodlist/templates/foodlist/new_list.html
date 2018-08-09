@@ -13,6 +13,7 @@ $(function() {
 
     function log( message,idn ) {
       $( "<li>" ).text( message ).attr('data-id', idn).appendTo( "#myfoodlist" );
+      $( "<input>" ).attr({'type':"text",'name':"ebb[]",'value':idn,'class':"silent-input"}).appendTo( "#createyourlist" );
     };
 
 
@@ -74,13 +75,15 @@ $(function() {
   </div>
 
 <div class="container grocery_list">
+<form id="createyourlist" method="POST">
+  {% csrf_token %}
   <div class="row">
     <div class="col-sm"></div>
     <div class="col-sm-6">
-      <input type="text" class="form-control form-control-lg" placeholder="ListName" required>
+      <input type="text" name="userlistinput" class="form-control form-control-lg" placeholder="ListName" required>
     </div>
     <div class="col-sm">
-      <button type="button" class="btn btn-lg btn-outline-success">Create</button>
+      <button type="submit" class="btn btn-lg btn-outline-success">Create</button>
     </div>
   </div>
 
@@ -89,6 +92,7 @@ $(function() {
       <ul id="myfoodlist"></ul>
     </div>
   </div>
+</form>
 </div>
 
 

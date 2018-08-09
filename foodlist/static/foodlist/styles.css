@@ -82,3 +82,7 @@ table,th,td,tr {
     font-family: 'Kaushan Script', cursive;
     font-size: 20px;
 }
+
+.silent-input {
+    display:none;
+}

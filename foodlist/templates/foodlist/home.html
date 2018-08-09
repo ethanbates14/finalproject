@@ -88,15 +88,16 @@ $('#foodModal').on('show.bs.modal', function (event) {
       success: function(data) {
         $( "#foodtarget" ).empty()
         $.map( data, function(fd) {
-          $( "<li>" ).text( fd.item ).attr('data-category', fd.category).appendTo( "#foodtarget" );
+          $( "<li>" ).text( fd.item ).attr('data-category', fd.category).attr('class', 'checklist').appendTo( "#foodtarget" );
         })
       }
     });
 
   var modal = $(this)
-  modal.find('.modal-title').text(listname + ' ' + tarlistid)
+  modal.find('.modal-title').text(listname)
 
 });
+
 </script>
 
 

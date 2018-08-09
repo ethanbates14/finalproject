@@ -99,14 +99,36 @@ def new_list(request):
     if not request.user.is_authenticated:
         return render(request, "foodlist/login.html", {"message": None})
     else:
-        food_cat = Category.objects.all()
-        food_cat = food_cat.extra(order_by = ['category_name'])
+        if request.method == "POST":
+            newName = request.POST.get('userlistinput')
+            fselected = inputs = request.POST.getlist('ebb[]')
 
-        context = {
-            "cg_data": food_cat
-        }
+            #Create New User List
+            newList = Userlist(list_name=newName,user=request.user)
+            newList.save()
+            #get new primary key
+            newPK = newList.id
 
-        return render(request, "foodlist/new_list.html",context)
+            #Add Records to List Detail
+            for i in fselected:
+                newDets = Listdetail(ldetail=Userlist.objects.get(pk=newPK),item=Food.objects.get(pk=i))
+                newDets.save()
+
+            user_lists = Userlist.objects.filter(user=request.user.id)
+            context = {
+                "user": request.user,
+                "user_data": user_lists
+            }
+
+            return render(request, "foodlist/home.html",context)
+        else:
+            food_cat = Category.objects.all()
+            food_cat = food_cat.extra(order_by = ['category_name'])
+
+            context = {
+                "cg_data": food_cat
+            }
+            return render(request, "foodlist/new_list.html",context)
 
 #AJAX Search Foods
 def get_foods(request):
