@@ -1,49 +1,99 @@
 {% extends "foodlist/base.html" %}
-
-{% block title %}
-    Add List
-{% endblock %}
-
+{% block title %} Add List {% endblock %}
 {% block additional_js %}
 <!-- jQuery !-->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"> </script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js">
+</script>
 <!-- jQuery UI !-->
 <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
 
 <script>
+$(function() {
 
-  $(function() {
-    $("#foods").autocomplete({
-      source: "/get_foods/",
-      select: function (event, ui) { //item selected
-        AutoCompleteSelectHandler(event, ui)
+    function log( message,idn ) {
+      $( "<li>" ).text( message ).attr('data-id', idn).appendTo( "#myfoodlist" );
+    };
+
+
+    $("#foodsearch").autocomplete({
+      source: function( request, response ) {
+        $.ajax({
+          url: "/get_foods/",
+          dataType: "json",
+          data: {
+            term: request.term
+          },
+          success: function( data ) {
+            response( $.map( data, function(item) {
+              return {id:item.id, name: item.name, value:item.name,label: item.name
+              }
+            }));
+          },
+          error: function(data) {
+            var er = "No Results"
+            return er
+          }
+        });
       },
       minLength: 2,
+      select: function( event, ui ) {
+        log(ui.item.value,ui.item.id);
+      },
+      close: function () {
+         this.value='';
+      }
     });
-  });
-
-  function AutoCompleteSelectHandler(event, ui)
-  {
-    var selectedObj = ui.item;
-  }
-
+});
 </script>
-{% endblock additional_js %}
 
+{% endblock additional_js %}
 {% block body %}
 <div class="container">
-    <div class="row">
-        <div class="col-sm-12">
+  <div class="row text-center">
+    <div class="col-sm-12">
 
-            <h3>Search</h3>
-            <div class="ui-widget">
-                <label for="foods">foods: </label>
-                <input id="foods">
-            </div>
+      <h1 class="av_header">Create New List</h1>
 
+        <div class="form-row">
+          <div class="form-group col-md-3">
+            <select id="select-category" class="form-control">
+              <option selected></option>
+              {% for cg in cg_data %}
+              <option data-id="{{cg.id}}">{{ cg.category_name }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="form-group col-md-9">
+            <input type="text" class="form-control" id="foodsearch" placeholder="Search..">
+          </div>
         </div>
+
     </div>
+  </div>
+
+<div class="container grocery_list">
+  <div class="row">
+    <div class="col-sm">
+
+    </div>
+    <div class="col-sm-6">
+      <input type="text" class="form-control form-control-lg" placeholder="ListName" required>
+    </div>
+    <div class="col-sm">
+      <button type="button" class="btn btn-lg btn-outline-success">Create</button>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-sm-12">
+      <ul id="myfoodlist"></ul>
+    </div>
+  </div>
 </div>
+
+
+</div> <!-- container -->
+
 
 {% endblock %}

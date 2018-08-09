@@ -77,17 +77,26 @@ def new_list(request):
     if not request.user.is_authenticated:
         return render(request, "foodlist/login.html", {"message": None})
     else:
-        return render(request, "foodlist/new_list.html")
+        food_cat = Category.objects.all()
+        food_cat = food_cat.extra(order_by = ['category_name'])
+
+        context = {
+            "cg_data": food_cat
+        }
+
+        return render(request, "foodlist/new_list.html",context)
 
 #Search Foods
 def get_foods(request):
     if request.is_ajax():
-        q = request.GET.get('term', '')
+        q = request.GET.get('term')
         foods = Food.objects.filter(item_name__icontains=q)
         results = []
         for pl in foods:
-            foods_json = {}
-            foods_json = pl.item_name
+            foods_json = {
+                "id": f"{pl.id}",
+                "name": f"{pl.item_name}"
+            }
             results.append(foods_json)
             data = json.dumps(results)
     else:
