@@ -23,6 +23,28 @@ def index(request):
     }
     return render(request, "foodlist/home.html", context)
 
+#AJAX Get List Details
+def get_ldetail(request):
+    if request.is_ajax():
+        list_no = request.GET.get('targetlist')
+
+        userlist_det = Listdetail.objects.filter(ldetail=list_no)
+
+        results = []
+        for pl in userlist_det:
+            userlist_det_json = {
+                "item": f"{pl.item}",
+                "category": f"{pl.item.category_id}"
+            }
+            results.append(userlist_det_json)
+            data = json.dumps(results)
+    else:
+        data = 'fail'
+
+    mimetype = 'application/json'
+    return HttpResponse(data, mimetype)
+
+
 #User Login
 def login_view(request):
     if request.method == "POST":
@@ -86,11 +108,16 @@ def new_list(request):
 
         return render(request, "foodlist/new_list.html",context)
 
-#Search Foods
+#AJAX Search Foods
 def get_foods(request):
     if request.is_ajax():
+        c = request.GET.get('category')
         q = request.GET.get('term')
-        foods = Food.objects.filter(item_name__icontains=q)
+
+        foods = Food.objects.filter(category_id=c)
+        foods = foods.filter(item_name__icontains=q)
+        foods = foods.extra(order_by = ['item_name'])
+
         results = []
         for pl in foods:
             foods_json = {
